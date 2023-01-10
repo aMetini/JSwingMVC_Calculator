@@ -1,8 +1,8 @@
 public class App {
     public static void main(String[] args) throws Exception {
-        CalculatorModel calModel = new CalculatorModel();
+        CalModel calModel = new CalModel();
         CalculatorView calView = new CalculatorView();
 
-        new CalculatorController(calModel, calView);
+        new CalController(calModel, calView);
     }
 }
