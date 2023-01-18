@@ -48,7 +48,7 @@ public class CalculatorView extends JFrame {
     }
 
     private void addCalComponents() {
-        outputField = new JTextField();
+        outputField = new JTextField(9);
         outputField.setBounds(10, 40, 270, 40); // 50, 25, 300, 50
         outputField.setFont(FONT);
         outputField.setEditable(false);

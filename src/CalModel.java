@@ -4,11 +4,8 @@ import java.math.RoundingMode;
 public class CalModel {
     private final static int MAX_ROUNDING_DECIMALS = 3;
 
-    private final static int MAX_ALLOWABLE_NUM_INPUT = 9;
-
     private String outputDisplay;
-    private String operationDisplay;
-    private double currentValue;
+    private char operator;
     private Double inputNo;
     private Double outputDisplayValue;
     private Double answer;
@@ -16,8 +13,8 @@ public class CalModel {
     private boolean errorModeOn;
 
     public CalModel() {
-        //inputNo = 0.0;
-        //answer = 0.0;
+        inputNo = 0.0;
+        answer = 0.0;
         resetCalculator();
     }
 
@@ -25,11 +22,34 @@ public class CalModel {
         return outputDisplay;
     }
 
-    public String getOperationDisplay() {
-        return operationDisplay;
+    public Double getInputNo() {
+        return inputNo;
     }
 
-    public void inputNumber(int no) {
+    public void setInputNo(Double noVal) {
+        inputNo = noVal;
+    }
+
+    public char getOperator() {
+        return operator;
+    }
+
+    public void setOperator(char op) {
+        if (errorModeOn) {
+            return;
+        }
+        try {
+            // Stores the current numerical output for future computation
+            inputNo = Double.valueOf(outputDisplay);
+            operator = op;
+            // After we set the operator, the next numberical input will be the first new digit input
+            firstDigitInput = true;
+        } catch (Exception e) {
+            enterErrorMode();
+        }
+    } 
+
+    public void enterNumber(int no) {
         if (errorModeOn) {
             return;
         }
@@ -38,9 +58,7 @@ public class CalModel {
             firstDigitInput = false;
             return;
         }
-        if (outputDisplay.length() >= MAX_ALLOWABLE_NUM_INPUT) {
-            return;
-        }
+
         if (outputDisplay.equals("0")) {
             outputDisplay = String.valueOf(no);
             return;
@@ -48,7 +66,7 @@ public class CalModel {
         outputDisplay += no;
     }
 
-    public void inputDec() {
+    public void enterDec() {
         if (errorModeOn) {
             return;
         }
@@ -62,38 +80,26 @@ public class CalModel {
         }
         outputDisplay += ".";
     }
-/* 
-    public void setOperation(char op) {
-        if (errorModeOn) {
-            return;
-        }
-        try {
-            // Stores the current numerical output for future computation
-            currentValue = Double.valueOf(outputDisplay);
-            operationDisplay = String.valueOf(op);
-            // After we set the operator, the next numberical input will be the first new digit input
-            firstDigitInput = true;
-        } catch (Exception e) {
-            enterErrorMode();
-        }
-    } */
-
+ 
     public void calculate() {
         if (errorModeOn) {
             return;
         }
-        /* 
-        if (operationDisplay.isEmpty()) {
+        
+        if (operator == ' ') {
             return;
-        } */
+        } 
         try {
-            char operator = operationDisplay.charAt(0);
             outputDisplayValue = Double.valueOf(outputDisplay);
 
-            answer = calculateOperation(operator, currentValue, outputDisplayValue);
+            answer = calculateOperation(operator, inputNo, outputDisplayValue);
 
             outputDisplay = answer.toString();
-            operationDisplay = "";
+            if (outputDisplay.endsWith(".0")) {
+                outputDisplay.replace(".0", "");
+            } else {
+                return;
+            }
             // The next numperical input will be the first new digit input
             firstDigitInput = true;
         } catch (NumberFormatException | ArithmeticException e) {
@@ -101,12 +107,25 @@ public class CalModel {
         }
     }
 
+    public void calculateSquare() {
+        // Error handling for squaring an empty field
+        if (outputDisplay.equals("")) {
+            outputDisplay.equals("NaN");
+        } else {
+            Double square = Math.pow(inputNo, 2);
+            outputDisplay = Double.toString(square);
+            if (outputDisplay.endsWith(".0")) {
+                outputDisplay.replace(".0", "");
+            } else {
+                return;
+            }
+        }
+    }
+
     public void calculateSquareRt() {
         if (errorModeOn) {
             return;
         } else {
-            //outputDisplayValue = Double.valueOf(outputDisplay);
-            inputNo = Double.valueOf(outputDisplay);
             Double squareRt = Math.sqrt(inputNo);
             outputDisplay = squareRt.toString();
             if (outputDisplay.endsWith(".0")) {
@@ -115,8 +134,22 @@ public class CalModel {
                 return;
             }
         }
-
     }
+
+    public void calculateReciprocal() {
+        // Error handling for getting the reciprocal of an empty field
+        if (errorModeOn) {
+            return;
+        } else {
+            Double reciprocal = 1 / inputNo;
+            outputDisplay = Double.toString(reciprocal);
+            if (outputDisplay.endsWith(".0")) {
+                outputDisplay.replace(".0", "");
+            } else {
+                return;
+            }
+        }
+    } 
 
     public void resetDisplay() {
         if (errorModeOn) {
@@ -140,9 +173,8 @@ public class CalModel {
     }
 
     public void resetCalculator() {
-        currentValue = 0.0;
+        inputNo = 0.0;
         outputDisplay = "0";
-        operationDisplay = "";
         firstDigitInput = true;
         errorModeOn = false;
     }
@@ -150,7 +182,6 @@ public class CalModel {
     private void enterErrorMode() {
         errorModeOn = true;
         outputDisplay = "Error";
-        operationDisplay = "";
     }
 
     private static double calculateOperation(char operator, double num1, double num2) throws ArithmeticException {
@@ -166,9 +197,9 @@ public class CalModel {
             case '×':
                 answer = num1 * num2;
                 break;
-            case '÷':
+            case '/':
                 if (num2 == 0.0) {
-                    throw new ArithmeticException("Division by 0");
+                    throw new ArithmeticException("Error - Division by 0");
                 }
                 answer = num1 / num2;
                 break;
