@@ -2,7 +2,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class CalModel {
-    private final static int MAX_ROUNDING_DECIMALS = 3;
+    private final int MAX_ROUNDING_DECIMALS = 3;
 
     private String outputDisplay;
     private char operator;
@@ -170,7 +170,7 @@ public class CalModel {
         outputDisplay = "Error";
     }
 
-    private static double calculateOperation(char operator, double num1, double num2) throws ArithmeticException {
+    private double calculateOperation(char operator, double num1, double num2) throws ArithmeticException {
         double answer = 0.0;
 
         switch (operator) {
@@ -195,12 +195,12 @@ public class CalModel {
     }
 
     private static double round(double answer, int maxRoundingDecimals) {
-        if (maxRoundingDecimals < 0) {
-            throw new IllegalArgumentException();
+        try {
+            BigDecimal bigDecimal = new BigDecimal(Double.toString(answer));
+            bigDecimal = bigDecimal.setScale(maxRoundingDecimals, RoundingMode.HALF_UP);
+            return bigDecimal.doubleValue();  
+        } catch (Exception e) {
+                throw new IllegalArgumentException("Error - unable to format as number");
+            }
         }
-        BigDecimal bigDecimal = new BigDecimal(Double.toString(answer));
-        bigDecimal = bigDecimal.setScale(maxRoundingDecimals, RoundingMode.HALF_UP);
-        return bigDecimal.doubleValue();
     }
-    
-}
