@@ -20,7 +20,8 @@ public class CalController {
     private void updateView() {
         calView.getOutputField().setText(calModel.getOuputDisplay());
         if (calModel.getOuputDisplay().endsWith(".0")) {
-            calModel.getOuputDisplay().replace(".0", "");
+            calModel.setOutputDisplay(calModel.getOuputDisplay().replace(".0", ""));
+            calView.getOutputField().setText(calModel.getOuputDisplay());
         } else {
             return;
         }
@@ -59,14 +60,14 @@ public class CalController {
                 Object cmdSource = e.getSource();
 
                 if (calView.outputField.getText().equals("NaN") || calView.outputField.getText().equals("Infinity")) {
-                    calModel.resetDisplay();
+                    calModel.resetCalculator();
                 }
 
                 for (int i = 0; i < 10; i++) {
                     if (cmdSource == calView.numBtnsArry[i]) {
                         calModel.enterNumber(i);
                         calView.outputField.setText(calView.outputField.getText().concat(String.valueOf(i)));
-
+                        updateView();
                     }
                 }
 

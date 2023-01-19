@@ -22,6 +22,10 @@ public class CalModel {
         return outputDisplay;
     }
 
+    public void setOutputDisplay(String outputField) {
+        outputDisplay = outputField;
+    }
+
     public Double getInputNo() {
         return inputNo;
     }
@@ -53,12 +57,13 @@ public class CalModel {
         if (errorModeOn) {
             return;
         }
+        // If the first operand number is entered, this line will replace the default display value of the calculator (i.e.0)
         if (firstDigitInput) {
             outputDisplay = String.valueOf(no);
             firstDigitInput = false;
             return;
         }
-
+        // If the number is 0, this line ensures that we do not have numbers displayed with any 0s to the left of that number.
         if (outputDisplay.equals("0")) {
             outputDisplay = String.valueOf(no);
             return;
@@ -95,13 +100,11 @@ public class CalModel {
             answer = calculateOperation(operator, inputNo, outputDisplayValue);
 
             outputDisplay = answer.toString();
-            if (outputDisplay.endsWith(".0")) {
-                outputDisplay.replace(".0", "");
-            } else {
-                return;
-            }
+
             // The next numperical input will be the first new digit input
             firstDigitInput = true;
+            // Single pipe or statement checks to see if either conditions apply (by checking for both) rather than checking one 
+            // condition is true and then ignoring the other condition.
         } catch (NumberFormatException | ArithmeticException e) {
             enterErrorMode();
         }
@@ -114,11 +117,6 @@ public class CalModel {
         } else {
             Double square = Math.pow(inputNo, 2);
             outputDisplay = Double.toString(square);
-            if (outputDisplay.endsWith(".0")) {
-                outputDisplay.replace(".0", "");
-            } else {
-                return;
-            }
         }
     }
 
@@ -128,11 +126,6 @@ public class CalModel {
         } else {
             Double squareRt = Math.sqrt(inputNo);
             outputDisplay = squareRt.toString();
-            if (outputDisplay.endsWith(".0")) {
-                outputDisplay.replace(".0", "");
-            } else {
-                return;
-            }
         }
     }
 
@@ -143,29 +136,22 @@ public class CalModel {
         } else {
             Double reciprocal = 1 / inputNo;
             outputDisplay = Double.toString(reciprocal);
-            if (outputDisplay.endsWith(".0")) {
-                outputDisplay.replace(".0", "");
-            } else {
-                return;
-            }
         }
     } 
 
-    public void resetDisplay() {
-        if (errorModeOn) {
-            return;
-        }
-        outputDisplay = "0";
-        firstDigitInput = true;
-    }
-
     public void deleteInput() {
+        // Variable length takes length of getText (i.e. calculator entry in outputField)
+        // We will use StringBuilder to create a mutable string of chars like an array from the outputField entry.
         int length = outputDisplay.length();
+        // Val removes one number from the length of getText entry so that it starts deleting from the last element of our string of chars
         int val = length - 1;
 
+        // If outputField length is NOT empty or begins at the 0 index start deleting
         if (length > 0) {
             StringBuilder delBack = new StringBuilder(outputDisplay);
             delBack.deleteCharAt(val);
+            // Sets value of newly deleted into the outputDisplay.
+            outputDisplay = delBack.toString();
         } else {
             outputDisplay = "0";
             firstDigitInput = true;
@@ -194,7 +180,7 @@ public class CalModel {
             case '-':
                 answer = num1 - num2;
                 break;
-            case '×':
+            case '*':
                 answer = num1 * num2;
                 break;
             case '/':

@@ -30,7 +30,7 @@ public class CalculatorView extends JFrame {
     public JButton[] numBtnsArry;
 
     private final Font FONT = new Font("Sans Serif", Font.BOLD, 20);
-    private final Font FONT17 = new Font("Sans Serif", Font.BOLD, 18);
+    private final Font FONT17 = new Font("Sans Serif", Font.BOLD, 17);
 
     public CalculatorView() {
         createCalculatorFrame();
@@ -40,7 +40,7 @@ public class CalculatorView extends JFrame {
     private void createCalculatorFrame() {
         frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 490); // 420, 550
+        frame.setSize(312, 523); 
         frame.getContentPane().setLayout(null);
         frame.getContentPane().setBackground(new Color(44, 203, 188));
         frame.setLocationRelativeTo(null);
@@ -49,13 +49,12 @@ public class CalculatorView extends JFrame {
 
     private void addCalComponents() {
         outputField = new JTextField(9);
-        outputField.setBounds(10, 40, 270, 40); // 50, 25, 300, 50
+        outputField.setBounds(10, 40, 270, 40); 
         outputField.setFont(FONT);
         outputField.setEditable(false);
         outputField.setHorizontalAlignment(SwingConstants.RIGHT);
         frame.add(outputField);
-        //outputField.setText(Integer.toString(resetVal)); //I want to be able to set the calculator to 0 but replace it with another # if another # is pressed
-        // Problem: If you start at 0 and then press (ex) 2, the display will look like "02".
+        outputField.setText("0");
         
         onButton = new JRadioButton("On");
         onButton.setBounds(10, 95, 60, 40);
