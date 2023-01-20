@@ -1,7 +1,7 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class CalModel {
+public class CalculatorModel {
     private final int MAX_ROUNDING_DECIMALS = 3;
 
     private String outputDisplay;
@@ -12,7 +12,7 @@ public class CalModel {
     private boolean firstDigitInput;
     private boolean errorModeOn;
 
-    public CalModel() {
+    public CalculatorModel() {
         inputNo = 0.0;
         answer = 0.0;
         resetCalculator();

@@ -1,11 +1,11 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CalController {
-    private CalModel calModel;
+public class CalculatorController {
+    private CalculatorModel calModel;
     private CalculatorView calView;
 
-    public CalController(CalModel model, CalculatorView view) {
+    public CalculatorController(CalculatorModel model, CalculatorView view) {
         calModel = model;
         calView = view;
 
