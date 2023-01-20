@@ -123,6 +123,10 @@ public class CalController {
             }
         }
 
+        /**
+         * Set all calculator components to true except onButton so that we can allow the calculator to be turned off.
+         * The offButton is enabled as well as the other buttons in order for the user to click the button
+         */
         private void enable() {
             calView.onButton.setEnabled(false);
             calView.offButton.setEnabled(true);
@@ -149,6 +153,10 @@ public class CalController {
             calView.clrButton.setEnabled(true);
         }
 
+        /**
+         * Set all calculator components to false except onButton so that we can allow the calcualtor to be turned on
+         * The onButton is enabled so that the user can click on the button to turn the calculator back on.
+         */
         private void disable() {
             calView.onButton.setEnabled(true);
             calView.offButton.setEnabled(false);
